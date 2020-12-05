@@ -1,5 +1,3 @@
-import 'package:daycounter/views/About.dart';
-import 'package:daycounter/views/Countdown.dart';
 import 'package:daycounter/views/Homepage.dart';
 import 'package:flutter/material.dart';
 
@@ -16,7 +14,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.orange,
       ),
-      home: About(),
+      home: HomePage(),
     );
   }
 }
