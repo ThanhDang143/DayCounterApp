@@ -8,12 +8,12 @@ class About extends StatelessWidget {
       child: Stack(
         fit: StackFit.expand,
         children: [
-          Image.asset(
-            'images/y.JPG',
+          Image.network(
+            'live.staticflickr.com/65535/50681491962_ed9db5e82e_c.jpg',
             fit: BoxFit.cover,
           ),
           Scaffold(
-              backgroundColor: Colors.transparent,
+              // backgroundColor: Colors.transparent,
               appBar: appBar('About Me'),
               drawer:
                   drawer(context, 'Đặng Văn Thanh', 'vanthanh1998@gmail.com'),
@@ -24,7 +24,7 @@ class About extends StatelessWidget {
                     Text('Đặng Văn Thanh', style: TextStyle(fontSize: 50),),
                     Text('vanthanh1998@gmail.com', style: TextStyle(fontSize: 20),),
                     Text('0358040000', style: TextStyle(fontSize: 20),),
-                    Text('Tiền Phong - Mê Linh - Hà Nội', style: TextStyle(fontSize: 20),),
+                    Text('Đại học Mỏ - Địa chất Hà Nội', style: TextStyle(fontSize: 20),),
                   ],
                 ),
               ))

@@ -8,8 +8,8 @@ Widget appBar(String title) {
   return AppBar(
     title: Text(title),
     centerTitle: true,
-    elevation: 0,
-    backgroundColor: Colors.orangeAccent.withOpacity(0.01),
+    // elevation: 0,
+    backgroundColor: Colors.orangeAccent.withOpacity(1),
   );
 }
 

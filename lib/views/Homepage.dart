@@ -67,12 +67,12 @@ class _HomePageState extends State<HomePage> {
       child: Stack(
         fit: StackFit.expand,
         children: [
-          Image.asset(
-            'images/y.JPG',
+          Image.network(
+            'live.staticflickr.com/65535/50681491962_ed9db5e82e_c.jpg',
             fit: BoxFit.cover,
           ),
           Scaffold(
-            backgroundColor: Colors.transparent,
+            // backgroundColor: Colors.transparent,
             appBar: appBar("Thanhhh's Counter"),
             drawer: drawer(context, 'Đặng Văn Thanh', 'vanthanh1998@gmail.com'),
             body: Center(
