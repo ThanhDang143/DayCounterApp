@@ -2,66 +2,39 @@ import 'dart:async';
 
 import 'package:daycounter/misc/misc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
-class HomePage extends StatefulWidget {
+class Countdown extends StatefulWidget {
   @override
-  _HomePageState createState() => _HomePageState();
+  _CountdownState createState() => _CountdownState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _CountdownState extends State<Countdown> {
   int time;
   DateTime fromDate;
-  DateTime toDate;
+  TextEditingController _textEditingController;
 
   @override
   void initState() {
+    _textEditingController = TextEditingController();
     time = 0;
-    fromDate = DateTime(2020, 7, 24);
-    toDate = DateTime.now();
-    Timer.periodic(Duration(microseconds: 1), (Timer t) => _differenceTime());
+    fromDate = DateTime.now();
+    Timer.periodic(Duration(seconds: 1), (Timer t) => _countdown());
     super.initState();
   }
 
-  void _differenceTime() {
-    if (toDate.difference(DateTime.now()).inDays == 0) {
+  void _countdown() {
+    if (time > 0) {
       setState(() {
-        time = DateTime.now().difference(fromDate).inSeconds;
-      });
-    } else {
-      setState(() {
-        time = toDate.difference(fromDate).inSeconds;
+        time--;
       });
     }
   }
 
-  Future<Null> _selectToDate(BuildContext context) async {
-    final DateTime picked = await showDatePicker(
-        context: context,
-        initialDate: toDate,
-        firstDate: DateTime(1998),
-        lastDate: DateTime(2098));
-    if (picked != null && picked != toDate)
-      setState(() {
-        toDate = picked;
-      });
-  }
-
-  Future<Null> _selectFromDate(BuildContext context) async {
-    final DateTime picked = await showDatePicker(
-        context: context,
-        initialDate: fromDate,
-        firstDate: DateTime(1998),
-        lastDate: DateTime(2098));
-    if (picked != null && picked != fromDate)
-      setState(() {
-        fromDate = picked;
-      });
-  }
-
   @override
   Widget build(BuildContext context) {
-    double widthScreen = MediaQuery.of(context).size.width;
     double heightScreen = MediaQuery.of(context).size.height;
+    double widthScreen = MediaQuery.of(context).size.width;
 
     return Container(
       child: Stack(
@@ -79,14 +52,37 @@ class _HomePageState extends State<HomePage> {
               child: Column(
                 children: [
                   SizedBox(height: 1.5 * heightScreen / 10),
-                  fromDurationToDataTime(time),
-                  SizedBox(height: 3.5 * heightScreen / 10),
+                  Text('$time',
+                      style:
+                          TextStyle(fontSize: 75, fontWeight: FontWeight.w500)),
+                  Text(' seconds'),
+                  SizedBox(height: 2.5 * heightScreen / 10),
+                  Card(
+                    child: TextFormField(
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                      ],
+                      showCursor: false,
+                      maxLength: 4,
+                      textAlign: TextAlign.center,
+                      keyboardType: TextInputType.number,
+                      controller: _textEditingController,
+                      textCapitalization: TextCapitalization.sentences,
+                      autofocus: true,
+                      decoration: InputDecoration(
+                          hintText: 'Seconds', border: OutlineInputBorder()),
+                    ),
+                  ),
+                  SizedBox(height: 1 * heightScreen / 10),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       RaisedButton(
                         onPressed: () {
-                          _selectFromDate(context);
+                          setState(() {
+                            time = int.parse(_textEditingController.text);
+                            _textEditingController.text = '';
+                          });
                         },
                         padding: const EdgeInsets.all(0.0),
                         child: Container(
@@ -100,13 +96,11 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 5),
+                              horizontal: 30, vertical: 5),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text('From'),
-                              Text(
-                                  '${fromDate.day.toString().padLeft(2, '0')}/${fromDate.month.toString().padLeft(2, '0')}/${fromDate.year}'),
+                              Text('Start', style: TextStyle(fontSize: 30)),
                             ],
                           ),
                         ),
@@ -114,7 +108,10 @@ class _HomePageState extends State<HomePage> {
                       SizedBox(width: widthScreen / 5),
                       RaisedButton(
                         onPressed: () {
-                          _selectToDate(context);
+                          setState(() {
+                            time = 0;
+                            _textEditingController.text = '';
+                          });
                         },
                         padding: const EdgeInsets.all(0.0),
                         child: Container(
@@ -132,9 +129,7 @@ class _HomePageState extends State<HomePage> {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text('To'),
-                              Text(
-                                  '${toDate.day.toString().padLeft(2, '0')}/${toDate.month.toString().padLeft(2, '0')}/${toDate.year}'),
+                              Text('Cancel', style: TextStyle(fontSize: 30)),
                             ],
                           ),
                         ),
